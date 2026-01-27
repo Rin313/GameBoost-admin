@@ -4,8 +4,8 @@
       <div v-show="showSearch" class="mb-[10px]">
         <el-card shadow="hover">
           <el-form ref="queryFormRef" :model="queryParams" :inline="true">
-            <el-form-item label="用户名称" prop="userName">
-              <el-input v-model="queryParams.userName" placeholder="请输入用户名称" clearable @keyup.enter="handleQuery" />
+            <el-form-item label="用户名" prop="userName">
+              <el-input v-model="queryParams.userName" placeholder="请输入用户名" clearable @keyup.enter="handleQuery" />
             </el-form-item>
             <el-form-item label="姓名" prop="realName">
               <el-input v-model="queryParams.realName" placeholder="请输入姓名" clearable @keyup.enter="handleQuery" />
@@ -49,13 +49,23 @@
               删除
             </el-button>
           </el-col>
+          <el-col :span="1.5">
+            <el-button v-has-permi="['system:user:update']" type="warning" plain :disabled="multiple" @click="handleOpenDialog('deposit')">
+              批量修改保证金
+            </el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button v-has-permi="['system:user:update']" type="warning" plain :disabled="multiple" @click="handleOpenDialog('credit')">
+              批量修改信誉分
+            </el-button>
+          </el-col>
           <right-toolbar v-model:show-search="showSearch" :search="true" @query-table="getList"></right-toolbar>
         </el-row>
       </template>
 
       <el-table border :data="userList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="50" align="center" />
-        <el-table-column key="userName" label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true" />
+        <el-table-column key="userName" label="用户名" align="center" prop="userName" :show-overflow-tooltip="true" />
         <el-table-column key="realName" label="姓名" align="center" prop="realName" />
         <el-table-column key="idCard" label="身份证号" align="center" prop="idCard" />
         <el-table-column key="phonenumber" label="手机号码" align="center" prop="phonenumber"/>
@@ -120,8 +130,8 @@
       <el-form ref="userFormRef" :model="form" :rules="rules" label-width="80px">        
         <el-row>
           <el-col :span="12">
-            <el-form-item v-if="form.userId == undefined" label="用户名称" prop="userName">
-              <el-input v-model="form.userName" placeholder="请输入用户名称" maxlength="30" />
+            <el-form-item v-if="form.userId == undefined" label="用户名" prop="userName">
+              <el-input v-model="form.userName" placeholder="请输入用户名" maxlength="30" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -271,9 +281,9 @@ const assetsDialog = reactive({
 
 // 表单数据
 const assetsform = reactive({
-  userId: '' as string | number,
+  userIds: null,
   bizType: '',
-  changes: 0 as number | undefined
+  changes: 0
 });
 
 // 表单校验规则
@@ -302,7 +312,7 @@ const currentOptions = computed(() => {
  * @param mode 'credit' | 'deposit'
  * @param row 当前行数据
  */
-const handleOpenDialog = (mode: 'credit' | 'deposit', row: UserRow) => {
+const handleOpenDialog = (mode: 'credit' | 'deposit', row?: UserRow) => {
   assetsDialog.mode = mode;
   assetsDialog.title = mode === 'credit' ? '修改信誉分' : '修改保证金';
   assetsDialog.visible = true;
@@ -310,7 +320,7 @@ const handleOpenDialog = (mode: 'credit' | 'deposit', row: UserRow) => {
   // 重置表单并赋值ID
   nextTick(() => {
     resetForm();
-    assetsform.userId = row.userId;
+    assetsform.userIds = row? [row.userId] : ids.value;
   });
 };
 /**
@@ -350,10 +360,10 @@ const assetsSubmitForm = async () => {
         const changesVal = Number(assetsform.changes);
         
         if (assetsDialog.mode === 'credit') {
-          await api.updateCredit(assetsform.userId, assetsform.bizType, changesVal);
+          await api.updateCredit(assetsform.userIds, assetsform.bizType, changesVal);
           proxy?.$modal.msgSuccess('操作成功');
         } else {
-          await api.updateDeposit(assetsform.userId, assetsform.bizType, changesVal);
+          await api.updateDeposit(assetsform.userIds, assetsform.bizType, changesVal);
           proxy?.$modal.msgSuccess('操作成功');
         }
         assetsDialog.visible = false;
@@ -387,11 +397,11 @@ const initData: PageData<UserForm, UserQuery> = {
   },
   rules: {
     userName: [
-      { required: true, message: '用户名称不能为空', trigger: 'blur' },
+      { required: true, message: '用户名不能为空', trigger: 'blur' },
       {
         min: 1,
         max: 30,
-        message: '用户名称长度必须介于 1 和 30 之间',
+        message: '用户名长度必须介于 1 和 30 之间',
         trigger: 'blur'
       }
     ],
@@ -535,8 +545,7 @@ const handleAdd = async () => {
   dialog.visible = true;
   dialog.title = '新增用户';
   form.value.password = initPassword.value.toString();
-  // 默认添加一个空的角色选项
-  form.value.userRoles = [{ roleId: '', expireTime: null }];
+  form.value.userRoles = [{ roleId: '3', expireTime: null }];
 };
 
 /** 修改按钮操作 */

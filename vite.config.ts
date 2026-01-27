@@ -64,7 +64,6 @@ export default defineConfig(({ mode, command }) => {
         '@vueuse/core',
         'echarts',
         'vue-i18n',
-        '@vueup/vue-quill',
         'element-plus/es/components/**/css'
       ]
     }

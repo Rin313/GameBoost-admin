@@ -57,7 +57,7 @@
         <el-button size="large" type="primary" class="login-btn" @click.prevent="handleLogin">
           {{ proxy.$t('login.login') }}
         </el-button>
-        <div class="social-login">
+        <!-- <div class="social-login">
           <div class="divider"><span>Or sign in with</span></div>
           <div class="social-icons">
             <el-button circle size="large" @click="doSocialLogin('wechat')">
@@ -67,7 +67,7 @@
               <svg-icon icon-class="github" />
             </el-button>
           </div>
-        </div>
+        </div> -->
       </el-form>
     </div>
   </div>
@@ -275,7 +275,7 @@ const codeUrl = ref('');
 const captchaEnabled = ref(true);
 
 // 注册开关
-const register = ref(true);
+const register = ref(false);
 const redirect = ref('/');
 const loginRef = ref<ElFormInstance>();
 

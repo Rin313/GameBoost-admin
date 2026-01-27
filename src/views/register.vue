@@ -87,17 +87,17 @@
           </el-form-item>
 
           <!-- 新增：协议勾选 -->
-          <el-form-item prop="isAgree" style="margin-bottom: 10px;">
+          <!-- <el-form-item prop="isAgree" style="margin-bottom: 10px;">
             <el-checkbox v-model="agree">
               我已阅读并同意
               <span class="link-type" @click.stop="showAgreement">《代练合伙人协议》</span>
             </el-checkbox>
-          </el-form-item>
+          </el-form-item> -->
         </div>
 
         <!-- 底部操作区 -->
         <div class="remember-box" style="justify-content: flex-end; margin-bottom: 15px;" v-show="step === 1">
-          <router-link class="link-type" :to="'/login'">
+          <router-link v-if="login" class="link-type" :to="'/login'">
             {{ proxy.$t('register.switchLoginPage') }}
           </router-link>
         </div>
@@ -305,9 +305,9 @@ import { useI18n } from 'vue-i18n';
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 const router = useRouter();
-
+const login=ref(false)
 const { t } = useI18n();
-const agree=ref(false);
+// const agree=ref(false);
 const step=ref(1);
 const registerForm = ref<ApplicateForm>({
   username: '',
@@ -385,7 +385,7 @@ const captchaEnabled = ref(true);
 const registerRef = ref<ElFormInstance>();
 
 const handleRegister = () => {
-  if (!agree.value) return proxy.$modal.msgWarning("请阅读并勾选协议");
+//   if (!agree.value) return proxy.$modal.msgWarning("请阅读并勾选协议");
   registerRef.value?.validate(async (valid: boolean) => {
     if (valid) {
       try{
@@ -409,7 +409,6 @@ const handleNextStep=()=>{
     });
 
 }
-const showAgreement=()=>{}
 const getCode = async () => {
   const res = await getCodeImg();
   const { code,data } = res;

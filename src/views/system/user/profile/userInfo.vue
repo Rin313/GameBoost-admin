@@ -33,7 +33,6 @@ const userForm = computed(() => props.user);
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 const userRef = ref<ElFormInstance>();
 const rule: ElFormRules = {
-  nickName: [{ required: true, message: '用户昵称不能为空', trigger: 'blur' }],
   email: [
     { required: true, message: '邮箱地址不能为空', trigger: 'blur' },
     {

@@ -141,9 +141,9 @@ export const uploadAvatar = (data: FormData) => {
   });
 };
 
-export const updateCredit = (userId: string | number, bizType: string, changes: string | number) => {
+export const updateCredit = (userIds, bizType: string, changes: string | number) => {
   const data = {
-    userId,
+    userIds,
     bizType,
     changes
   };
@@ -153,9 +153,9 @@ export const updateCredit = (userId: string | number, bizType: string, changes: 
     data: data
   });
 };
-export const updateDeposit = (userId: string | number, bizType: string, changes: string | number) => {
+export const updateDeposit = (userIds, bizType: string, changes: string | number) => {
   const data = {
-    userId,
+    userIds,
     bizType,
     changes
   };

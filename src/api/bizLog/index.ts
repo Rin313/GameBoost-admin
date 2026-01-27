@@ -16,3 +16,17 @@ export const listCredit = (query: BizLogQuery): AxiosPromise<BizLogVO> => {
     params: query
   });
 };
+export const listDepositSelf = (query: BizLogQuery): AxiosPromise<BizLogVO> => {
+  return request({
+    url: '/bizLog/listDepositSelf',
+    method: 'get',
+    params: query
+  });
+};
+export const listCreditSelf = (query: BizLogQuery): AxiosPromise<BizLogVO> => {
+  return request({
+    url: '/bizLog/listCreditSelf',
+    method: 'get',
+    params: query
+  });
+};

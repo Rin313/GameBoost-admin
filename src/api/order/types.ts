@@ -32,6 +32,7 @@ export interface OrderInsertForm {
   amount?: number;
   requirement?: string;
   orderType?: string;
+  remark?: string;
 }
 
 // 修改表单

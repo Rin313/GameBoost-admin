@@ -289,7 +289,7 @@ const handleAssign = () => {
 };
 const handleClose = () => {
   const obj: RouteLocationNormalized = {
-    path: '/system/order',
+    path: '/order',
     fullPath: '',
     hash: '',
     matched: [],

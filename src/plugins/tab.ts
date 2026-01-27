@@ -44,7 +44,7 @@ export default {
   closeOpenPage(obj: RouteLocationRaw): void {
     useTagsViewStore().delView(router.currentRoute.value);
     if (obj !== undefined) {
-      router.push(obj);
+      router.push(obj);`nohup java -jar /opt/rouyi-admin-server/ruoyi-admin.jar &`
     }
   },
   // 关闭指定tab页签

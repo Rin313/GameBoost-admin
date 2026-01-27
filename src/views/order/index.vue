@@ -291,7 +291,7 @@ const handleUpdate = (row: OrderVO) => {
 
 // 跳转派单页面
 const handleDispatch = (row: OrderVO) => {
-  router.push(`/system/dispatch/${row.id}`);
+  router.push(`/dispatch/${row.id}`);
 };
 
 // 重置表单
@@ -316,7 +316,8 @@ const submitForm = async () => {
         deadline: form.value.deadline,
         amount: form.value.amount,
         requirement: form.value.requirement,
-        orderType: form.value.orderType
+        orderType: form.value.orderType,
+        remark:form.value.remark,
       };
       await addOrder(insertData);
       ElMessage.success('操作成功');

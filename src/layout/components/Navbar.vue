@@ -48,7 +48,7 @@
           </div>
           <template #dropdown>
             <el-dropdown-menu>
-              <router-link v-if="!dynamic" to="/user/profile">
+              <router-link v-if="!dynamic" to="/profile/profile">
                 <el-dropdown-item>{{ proxy.$t('navbar.personalCenter') }}</el-dropdown-item>
               </router-link>
               <el-dropdown-item v-if="settingsStore.showSettings" command="setLayout">
@@ -110,11 +110,7 @@ const logout = async () => {
   } as ElMessageBoxOptions);
   userStore.logout().then(() => {
     router.replace({
-      path: '/login',
-      query: {
-        redirect: encodeURIComponent('/')
-        //redirect: encodeURIComponent(router.currentRoute.value.fullPath || '/')
-      }
+      path: '/login'
     });
     proxy?.$tab.closeAllPage();
   });
