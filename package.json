@@ -1,7 +1,4 @@
 {
-  "$schema": "https://json.schemastore.org/package",
-  "name": "ruoyi-vue-plus",
-  "version": "5.5.1-2.5.1",
   "type": "module",
   "scripts": {
     "dev": "vite serve --mode development",
@@ -10,10 +7,6 @@
     "preview": "vite preview",
     "lint:eslint": "eslint",
     "lint:eslint:fix": "eslint --fix"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://gitee.com/JavaLionLi/plus-ui.git"
   },
   "dependencies": {
     "@element-plus/icons-vue": "2.3.2",
@@ -62,9 +55,6 @@
     "vite-plugin-vue-devtools": "8.0.3",
     "vitest": "3.2.4",
     "vue-tsc": "^2.2.12"
-  },
-  "overrides": {
-    "quill": "2.0.2"
   },
   "engines": {
     "node": ">=18.18.0",
