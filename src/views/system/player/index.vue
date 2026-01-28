@@ -50,6 +50,11 @@
             </el-button>
           </el-col>
           <el-col :span="1.5">
+            <el-button v-has-permi="['system:user:remove']" type="success" plain :disabled="canActive" icon="Delete" @click="handleActive()">
+              激活
+            </el-button>
+          </el-col>
+          <el-col :span="1.5">
             <el-button v-has-permi="['system:user:update']" type="warning" plain :disabled="multiple" @click="handleOpenDialog('deposit')">
               批量修改保证金
             </el-button>
@@ -185,62 +190,71 @@
         </div>
       </template>
     </el-dialog>
-      <el-dialog
-    v-model="assetsDialog.visible"
-    :title="assetsDialog.title"
-    width="500px"
-    append-to-body
-    @close="assetsResetForm"
-  >
-    <el-form ref="formRef" :model="assetsform" :rules="assetsRules" label-width="100px">
-      <el-form-item label="业务类型" prop="bizType">
-        <el-select 
-          v-model="assetsform.bizType" 
-          placeholder="请选择业务类型" 
-          style="width: 100%"
-          @change="handleBizTypeChange"
-        >
-          <el-option
-            v-for="item in currentOptions"
-            :key="item.label"
-            :label="item.label"
-            :value="item.label" 
-          />
-        </el-select>
-      </el-form-item>
-      
-      <el-form-item label="变动数值" prop="changes">
-        <el-input-number 
-          v-if="assetsDialog.mode === 'credit'"
+    <el-dialog
+  v-model="assetsDialog.visible"
+  :title="assetsDialog.title"
+  width="500px"
+  append-to-body
+  @close="assetsResetForm"
+>
+  <el-form ref="formRef" :model="assetsform" :rules="assetsRules" label-width="100px">
+    <el-form-item label="业务类型" prop="bizType">
+      <el-select 
+        v-model="assetsform.bizType" 
+        placeholder="请选择业务类型" 
+        style="width: 100%"
+        @change="handleBizTypeChange"
+      >
+        <el-option
+          v-for="item in currentOptions"
+          :key="item.label"
+          :label="item.label"
+          :value="item.label" 
+        />
+      </el-select>
+    </el-form-item>
+    <el-form-item label="操作模式" prop="force">
+      <el-radio-group v-model="assetsform.force">
+        <!-- false 代表增减变动，true 代表直接设置 -->
+        <el-radio :value="false">增减变动</el-radio>
+        <el-radio :value="true">直接设置</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item 
+      :label="assetsform.force ? '设置数值' : '变动数值'" 
+      prop="changes"
+    >
+      <el-input-number 
+        v-if="assetsDialog.mode === 'credit'"
+        v-model="assetsform.changes" 
+        :step="1" 
+        style="width: 100%" 
+        :placeholder="assetsform.force ? '请输入目标数值' : '请输入变动数值'" 
+      />
+      <el-input-number 
+          v-else
           v-model="assetsform.changes" 
-          :step="1" 
+          :precision="2"
+          :step="1.00"
           style="width: 100%" 
-          placeholder="请输入变动数值" 
-        />
-        <el-input-number 
-            v-else
-            v-model="assetsform.changes" 
-            :precision="2"
-            :step="1.00"
-            style="width: 100%" 
-            placeholder="请输入变动数值" 
-        />
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="assetsDialog.visible = false">取 消</el-button>
-        <el-button type="primary" @click="assetsSubmitForm">确 定</el-button>
-      </div>
-    </template>
-  </el-dialog>
+          :placeholder="assetsform.force ? '请输入目标数值' : '请输入变动数值'" 
+      />
+    </el-form-item>
+
+  </el-form>
+  <template #footer>
+    <div class="dialog-footer">
+      <el-button @click="assetsDialog.visible = false">取 消</el-button>
+      <el-button type="primary" @click="assetsSubmitForm">确 定</el-button>
+    </div>
+  </template>
+</el-dialog>
   </div>
 </template>
 
 <script setup name="User" lang="ts">
 import api from '@/api/system/user';
 import { UserForm, UserQuery, UserVO, UserRoleDTO } from '@/api/system/user/types';
-import { listRole } from '@/api/system/role';
 import { RoleVO } from '@/api/system/role/types';
 import { useUserStore } from '@/store/modules/user';
 import { useI18n } from 'vue-i18n';
@@ -260,14 +274,16 @@ const showSearch = ref(true);
 const ids = ref<Array<number | string>>([]);
 const single = ref(true);
 const multiple = ref(true);
+const selected=ref([]);
 const total = ref(0);
 const dateRange = ref<[DateModelType, DateModelType]>(['', '']);
 const initPassword = ref<string>('');
-const roleOptions = ref<RoleVO[]>([]);
 
 const queryFormRef = ref<ElFormInstance>();
 const userFormRef = ref<ElFormInstance>();
-
+const canActive=computed(()=>{
+    return selected.value.length===0 || selected.value.some(item=>item.status!=='2');
+})
 const dialog = reactive({
   visible: false,
   title: ''
@@ -283,7 +299,8 @@ const assetsDialog = reactive({
 const assetsform = reactive({
   userIds: null,
   bizType: '',
-  changes: 0
+  changes: 0,
+  force:false,
 });
 
 // 表单校验规则
@@ -356,14 +373,12 @@ const assetsSubmitForm = async () => {
   await formRef.value.validate(async (valid) => {
     if (valid) {
       try {
-        // 确保 changes 是数字
         const changesVal = Number(assetsform.changes);
-        
         if (assetsDialog.mode === 'credit') {
-          await api.updateCredit(assetsform.userIds, assetsform.bizType, changesVal);
+          await api.updateCredit(assetsform.userIds, assetsform.bizType, changesVal,assetsform.force);
           proxy?.$modal.msgSuccess('操作成功');
         } else {
-          await api.updateDeposit(assetsform.userIds, assetsform.bizType, changesVal);
+          await api.updateDeposit(assetsform.userIds, assetsform.bizType, changesVal,assetsform.force);
           proxy?.$modal.msgSuccess('操作成功');
         }
         assetsDialog.visible = false;
@@ -458,12 +473,6 @@ const initData: PageData<UserForm, UserQuery> = {
 const data = reactive<PageData<UserForm, UserQuery>>(initData);
 const { queryParams, form, rules } = toRefs<PageData<UserForm, UserQuery>>(data);
 
-/** 获取角色选项列表 */
-const getRoleOptions = async () => {
-  const res = await listRole(null);
-  roleOptions.value = res.data.records;
-};
-
 /** 查询用户列表 */
 const getList = async () => {
   const res = await api.listPlayers(proxy?.addDateRange(queryParams.value, dateRange.value));
@@ -496,6 +505,16 @@ const handleDelete = async (row?: UserVO) => {
   }
   catch(err){}
 };
+const handleActive = async () => {
+  const userIds = ids.value;
+  try{
+    await proxy?.$modal.confirm('是否确认激活用户编号为"' + userIds + '"的数据项？');
+    await api.activeUser(userIds);
+    await getList();
+    proxy?.$modal.msgSuccess('激活成功');
+  }
+  catch(err){}
+};
 
 /** 重置密码按钮操作 */
 const handleResetPwd = async (row: UserVO) => {
@@ -520,6 +539,7 @@ const handleResetPwd = async (row: UserVO) => {
 
 /** 选择条数  */
 const handleSelectionChange = (selection: UserVO[]) => {
+    selected.value=selection;
   ids.value = selection.map((item) => item.userId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
@@ -540,8 +560,6 @@ const cancel = () => {
 /** 新增按钮操作 */
 const handleAdd = async () => {
   reset();
-  // 使用 listRole 获取角色列表
-  await getRoleOptions();
   dialog.visible = true;
   dialog.title = '新增用户';
   form.value.password = initPassword.value.toString();
@@ -554,9 +572,8 @@ const handleUpdate = async (row?: UserForm) => {
   const userId = row?.userId || ids.value[0];
   
   // 并行请求用户信息和角色列表
-  const [userRes, roleRes] = await Promise.all([
-    api.getUser(userId),
-    listRole(null)
+  const [userRes] = await Promise.all([
+    api.getUser(userId)
   ]);
   
   dialog.visible = true;
@@ -564,9 +581,6 @@ const handleUpdate = async (row?: UserForm) => {
   
   const userData = userRes.data.user;
   Object.assign(form.value, userData);
-  
-  // 使用 listRole 返回的角色列表
-  roleOptions.value = roleRes.data.records;
 
   if (userData.roles && userData.roles.length > 0) {
     // 从 user.roles 获取角色信息（包含 expireTime）

@@ -42,11 +42,17 @@
           <el-col :span="1.5">
             <el-button type="primary" plain icon="Plus" @click="handleAdd">新增</el-button>
           </el-col>
+          <el-col :span="1.5">
+            <el-button v-has-permi="['system:user:update']" type="warning" plain :disabled="canExport" @click="handleExport()">
+              批量导出转账模板
+            </el-button>
+          </el-col>
           <right-toolbar v-model:show-search="showSearch" @query-table="getList"></right-toolbar>
         </el-row>
       </template>
 
-      <el-table border :data="orderList">
+      <el-table border :data="orderList" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="50" align="center" />
         <el-table-column label="订单编号" align="center" prop="orderNo" :show-overflow-tooltip="true" />
         <el-table-column label="截止日期" align="center" prop="deadline" width="180" />
         <el-table-column label="订单金额" align="center" prop="amount">
@@ -156,6 +162,10 @@ const router = useRouter();
 
 // 列表数据
 const orderList = ref<OrderVO[]>([]);
+const ids = ref<Array<number | string>>([]);
+const selected =ref([]);
+const single = ref(true);
+const multiple = ref(true);
 const total = ref(0);
 const showSearch = ref(true);
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
@@ -179,6 +189,9 @@ const dialogTitle = ref('');
 const isUpdate = ref(false);
 const formRef = ref<FormInstance>();
 
+const canExport=computed(()=>{
+    return selected.value.length===0 || selected.value.some(item=>item.status!=='1');
+})
 // 表单数据
 const initFormData: OrderUpdateForm = {
   id: undefined,
@@ -355,6 +368,23 @@ const formatAmount = (amount: number | string | null | undefined): string => {
         return '0.00';
     }
     return Number(amount).toFixed(2);
+};
+/** 选择条数  */
+const handleSelectionChange = (selection) => {
+    selected.value=selection;
+  ids.value = selection.map((item) => item.id);
+  single.value = selection.length != 1;
+  multiple.value = !selection.length;
+};
+
+const handleExport = () => {
+    for(const t of selected.value){
+        proxy?.download(
+            `/order/export/alipay?orderId=${t.id}`,
+            {},
+            `订单${t.orderNo}_${new Date().getTime()}.xls`
+        );
+    }
 };
 onMounted(() => {
   getList();

@@ -49,17 +49,21 @@ export const updateUser = (data: UserForm) => {
   });
 };
 
-
-/**
- * 删除用户
- * @param userId 用户ID
- */
 export const delUser = (userId: Array<string | number> | string | number) => {
   return request({
     url: '/system/user/delete/' + userId,
     method: 'post'
   });
 };
+
+export const activeUser = (userIds) => {
+  return request({
+    url: '/system/user/active',
+    method: 'post',
+    data: userIds
+  });
+};
+
 
 /**
  * 用户密码重置
@@ -141,11 +145,12 @@ export const uploadAvatar = (data: FormData) => {
   });
 };
 
-export const updateCredit = (userIds, bizType: string, changes: string | number) => {
+export const updateCredit = (userIds, bizType: string, changes: string | number,force) => {
   const data = {
     userIds,
     bizType,
-    changes
+    changes,
+    force
   };
   return request({
     url: '/bizLog/updateCredit',
@@ -153,11 +158,12 @@ export const updateCredit = (userIds, bizType: string, changes: string | number)
     data: data
   });
 };
-export const updateDeposit = (userIds, bizType: string, changes: string | number) => {
+export const updateDeposit = (userIds, bizType: string, changes: string | number,force) => {
   const data = {
     userIds,
     bizType,
-    changes
+    changes,
+    force
   };
   return request({
     url: '/bizLog/updateDeposit',
@@ -172,6 +178,7 @@ export default {
   addUser,
   updateUser,
   delUser,
+  activeUser,
   resetUserPwd,
   getUserProfile,
   updateUserProfile,
