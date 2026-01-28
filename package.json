@@ -10,14 +10,12 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "2.3.2",
-    "@highlightjs/vue-plugin": "2.1.2",
     "@vueuse/core": "13.9.0",
     "animate.css": "4.1.1",
     "axios": "1.13.1",
     "echarts": "5.6.0",
     "element-plus": "2.11.7",
     "file-saver": "2.0.5",
-    "highlight.js": "11.11.1",
     "nprogress": "0.2.0",
     "pinia": "3.0.3",
     "vue": "3.5.22",
@@ -25,8 +23,7 @@
     "vue-i18n": "11.1.12",
     "vue-json-pretty": "2.6.0",
     "vue-router": "4.6.3",
-    "vue-types": "6.0.0",
-    "vxe-table": "4.17.7"
+    "vue-types": "6.0.0"
   },
   "devDependencies": {
     "@iconify/json": "^2.2.403",
@@ -52,13 +49,8 @@
     "unplugin-vue-setup-extend-plus": "1.0.1",
     "vite": "6.4.1",
     "vite-plugin-svg-icons-ng": "^1.5.2",
-    "vite-plugin-vue-devtools": "8.0.3",
     "vitest": "3.2.4",
     "vue-tsc": "^2.2.12"
-  },
-  "engines": {
-    "node": ">=18.18.0",
-    "npm": ">=8.9.0"
   },
   "browserslist": [
     "Chrome >= 87",

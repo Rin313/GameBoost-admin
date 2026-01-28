@@ -1,11 +1,9 @@
 <template>
   <section class="app-main">
     <router-view v-slot="{ Component, route }">
-      <transition :enter-active-class="animate" mode="out-in">
         <keep-alive :include="tagsViewStore.cachedViews">
           <component :is="Component" v-if="!route.meta.link" :key="route.path" />
         </keep-alive>
-      </transition>
     </router-view>
     <iframe-toggle />
   </section>

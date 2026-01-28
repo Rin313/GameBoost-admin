@@ -4,7 +4,6 @@
     :class="{ collapse: collapse }"
     :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground }"
   >
-    <transition :enter-active-class="proxy?.animate.logoAnimate.enter" mode="out-in">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
         <img v-if="logo" :src="logo" class="sidebar-logo" />
         <h1 v-else class="sidebar-title" :style="{ color: sideTheme === 'theme-dark' ? variables.logoTitleColor : variables.logoLightTitleColor }">
@@ -17,7 +16,6 @@
           {{ title }}
         </h1>
       </router-link>
-    </transition>
   </div>
 </template>
 

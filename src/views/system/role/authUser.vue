@@ -1,7 +1,6 @@
 <template>
   <div class="p-2">
-    <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
-      <div v-show="showSearch" class="search">
+<div v-show="showSearch" class="search">
         <el-form ref="queryFormRef" :model="queryParams" :inline="true">
           <el-form-item label="用户名" prop="userName">
             <el-input v-model="queryParams.userName" placeholder="请输入用户名" clearable @keyup.enter="handleQuery" />
@@ -15,7 +14,6 @@
           </el-form-item>
         </el-form>
       </div>
-    </transition>
     <el-card shadow="never">
       <template #header>
         <el-row :gutter="10">

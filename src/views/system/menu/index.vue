@@ -1,7 +1,6 @@
 <template>
   <div class="p-2">
-    <transition :enter-active-class="proxy?.animate.searchAnimate.enter" :leave-active-class="proxy?.animate.searchAnimate.leave">
-      <div v-show="showSearch" class="mb-[10px]">
+<div v-show="showSearch" class="mb-[10px]">
         <el-card shadow="hover">
           <el-form ref="queryFormRef" :model="queryParams" :inline="true">
             <el-form-item label="菜单名称" prop="menuName">
@@ -19,7 +18,6 @@
           </el-form>
         </el-card>
       </div>
-    </transition>
 
     <el-card shadow="hover">
       <template #header>

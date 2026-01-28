@@ -2,7 +2,6 @@
   <div :class="{ 'has-logo': showLogo }" :style="{ backgroundColor: bgColor }">
     <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper">
-      <transition :enter-active-class="proxy?.animate.menuSearchAnimate.enter" mode="out-in">
         <el-menu
           :default-active="activeMenu"
           :collapse="isCollapse"
@@ -16,7 +15,6 @@
         >
           <sidebar-item v-for="(r, index) in sidebarRouters" :key="r.path + index" :item="r" :base-path="r.path" />
         </el-menu>
-      </transition>
     </el-scrollbar>
   </div>
 </template>
