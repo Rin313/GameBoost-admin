@@ -16,20 +16,22 @@
       <el-descriptions-item label="操作模块">
         <template #default> {{ info.title }} / {{ typeFormat(info) }} </template>
       </el-descriptions-item>
-      <el-descriptions-item label="请求参数">
-        <template #default>
-          <div class="max-h-300px overflow-y-auto">
-            <VueJsonPretty :data="formatToJsonObject(info.operParam)" />
-          </div>
-        </template>
-      </el-descriptions-item>
-      <el-descriptions-item label="返回参数">
-        <template #default>
-          <div class="max-h-300px overflow-y-auto">
-            <VueJsonPretty :data="formatToJsonObject(info.jsonResult)" />
-          </div>
-        </template>
-      </el-descriptions-item>
+<el-descriptions-item label="请求参数">
+  <template #default>
+    <div class="max-h-300px overflow-y-auto">
+      <!-- 替换为 pre 标签 -->
+      <pre class="json-display">{{ formatToJsonString(info.operParam) }}</pre>
+    </div>
+  </template>
+</el-descriptions-item>
+<el-descriptions-item label="返回参数">
+  <template #default>
+    <div class="max-h-300px overflow-y-auto">
+      <!-- 替换为 pre 标签 -->
+      <pre class="json-display">{{ formatToJsonString(info.jsonResult) }}</pre>
+    </div>
+  </template>
+</el-descriptions-item>
       <el-descriptions-item label="操作时间">
         <template #default> {{ proxy.parseTime(info.operTime) }}</template>
       </el-descriptions-item>
@@ -44,9 +46,6 @@
 
 <script setup lang="ts">
 import type { OperLogForm } from '@/api/monitor/operlog/types';
-import VueJsonPretty from 'vue-json-pretty';
-import 'vue-json-pretty/lib/styles.css';
-
 const open = ref(false);
 const info = ref<OperLogForm | null>(null);
 function openDialog(row: OperLogForm) {
@@ -63,18 +62,16 @@ defineExpose({
   closeDialog
 });
 
-/**
- * json转为对象
- * @param data 原始数据
- */
-function formatToJsonObject(data: string) {
+const formattedOperParam = computed(() => formatToJsonString(info.value?.operParam || ''));
+const formattedJsonResult = computed(() => formatToJsonString(info.value?.jsonResult || ''));
+
+function formatToJsonString(data: string) {
   try {
-    return JSON.parse(data);
-  } catch (error) {
+    return JSON.stringify(JSON.parse(data), null, 2);
+  } catch (e) {
     return data;
   }
 }
-
 /**
  * 字典信息
  */
@@ -92,10 +89,12 @@ label宽度固定
 :deep(.el-descriptions__label) {
   min-width: 100px;
 }
-/**
-文字超过 换行显示
-*/
-:deep(.el-descriptions__content) {
-  max-width: 300px;
+.json-display {
+  margin: 0;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; /* 等宽字体 */
+  white-space: pre-wrap; /* 允许换行，防止过长溢出 */
+  word-break: break-all;
+  font-size: 12px;
+  color: #606266;
 }
 </style>
