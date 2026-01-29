@@ -95,7 +95,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="BizLogDeposit">
+<script setup lang="ts">
 import { listDeposit } from '@/api/bizLog';
 import { listPlayers } from '@/api/system/user';
 import { BizLogVO, BizLogQuery } from '@/api/bizLog/types';

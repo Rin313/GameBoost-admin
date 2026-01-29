@@ -23,7 +23,8 @@
       <li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)"><close style="width: 1em; height: 1em" /> 关闭当前</li>
       <li @click="closeOthersTags"><circle-close style="width: 1em; height: 1em" /> 关闭其他</li>
       <li v-if="!isLastView()" @click="closeRightTags"><right style="width: 1em; height: 1em" /> 关闭右侧</li>
-      <li @click="closeAllTags(selectedTag)"><circle-close style="width: 1em; height: 1em" /> 全部关闭</li>
+      <!-- <li @click="closeAllTags(selectedTag)"><circle-close style="width: 1em; height: 1em" /> 全部关闭</li> -->
+       <!-- 有bug，暂时搁置 -->
     </ul>
   </div>
 </template>
@@ -152,13 +153,6 @@ const closeSelectedTag = (view: RouteLocationNormalized) => {
 };
 const closeRightTags = () => {
   proxy?.$tab.closeRightPage(selectedTag.value).then((visitedViews: RouteLocationNormalized[]) => {
-    if (!visitedViews.find((i: RouteLocationNormalized) => i.fullPath === route.fullPath)) {
-      toLastView(visitedViews);
-    }
-  });
-};
-const closeLeftTags = () => {
-  proxy?.$tab.closeLeftPage(selectedTag.value).then((visitedViews: RouteLocationNormalized[]) => {
     if (!visitedViews.find((i: RouteLocationNormalized) => i.fullPath === route.fullPath)) {
       toLastView(visitedViews);
     }

@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="layoutBreadcrumbUserNews">
+<script setup lang="ts">
 import { useNoticeStore } from '@/store/modules/notice';
 
 const noticeStore = useNoticeStore();

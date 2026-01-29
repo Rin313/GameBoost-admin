@@ -101,7 +101,7 @@
   </div>
 </template>
 
-<script setup name="Operlog" lang="ts">
+<script setup lang="ts">
 import { list } from '@/api/monitor/operlog';
 import { OperLogForm, OperLogQuery, OperLogVO } from '@/api/monitor/operlog/types';
 import OperInfoDialog from './oper-info-dialog.vue';

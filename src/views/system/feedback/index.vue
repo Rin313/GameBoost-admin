@@ -112,7 +112,7 @@
   </div>
 </template>
 
-<script setup name="Feedback" lang="ts">
+<script setup lang="ts">
 import { listNotice, handleNotice } from '@/api/system/notice';
 import type { NoticeQuery, NoticeVO } from '@/api/system/notice/types';
 

@@ -62,7 +62,7 @@
   </div>
 </template>
 
-<script setup name="AuthUser" lang="ts">
+<script setup lang="ts">
 import { allocatedUserList, authUserCancelAll } from '@/api/system/role';
 import { UserQuery } from '@/api/system/user/types';
 import { UserVO } from '@/api/system/user/types';

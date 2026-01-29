@@ -60,7 +60,7 @@
   </div>
 </template>
 
-<script setup name="Profile" lang="ts">
+<script setup lang="ts">
 import UserAvatar from './userAvatar.vue';
 //import UserInfo from './userInfo.vue';
 import ResetPwd from './resetPwd.vue';

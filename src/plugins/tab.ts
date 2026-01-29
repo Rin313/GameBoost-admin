@@ -12,6 +12,7 @@ export default {
     if (obj === undefined) {
       matched.forEach((m: RouteLocationMatched) => {
         if (m.components && m.components.default && m.components.default.name) {
+            console.log(m.components.default.name)
           if (!['Layout', 'ParentView'].includes(m.components.default.name)) {
             obj = {
               name: m.components.default.name,

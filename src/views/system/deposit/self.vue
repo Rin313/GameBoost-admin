@@ -90,7 +90,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="BizLogDeposit">
+<script setup lang="ts">
 import { listDepositSelf } from '@/api/bizLog';
 import { BizLogVO, BizLogQuery } from '@/api/bizLog/types';
 

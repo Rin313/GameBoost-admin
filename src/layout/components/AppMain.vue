@@ -9,7 +9,7 @@
   </section>
 </template>
 
-<script setup name="AppMain" lang="ts">
+<script setup lang="ts">
 import { useSettingsStore } from '@/store/modules/settings';
 import { useTagsViewStore } from '@/store/modules/tagsView';
 

@@ -266,7 +266,7 @@
   </div>
 </template>
 
-<script setup name="Menu" lang="ts">
+<script setup lang="ts">
 import { addMenu, cascadeDelMenu, delMenu, listMenu, updateMenu } from '@/api/system/menu';
 import { MenuForm, MenuQuery, MenuVO } from '@/api/system/menu/types';
 import { MenuTypeEnum } from '@/enums/MenuTypeEnum';

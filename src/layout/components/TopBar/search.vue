@@ -25,7 +25,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="layoutBreadcrumbSearch">
+<script setup lang="ts">
 import { getNormalPath } from '@/utils/ruoyi';
 import { isHttp } from '@/utils/validate';
 import { usePermissionStore } from '@/store/modules/permission';

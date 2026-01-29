@@ -14,7 +14,6 @@
             <span class="week">{{ currentWeek }}</span>
           </div>
         </div>
-        <!-- 使用纯CSS/SVG作为通用插图，不依赖外部图片 -->
         <div class="welcome-img">
           <svg class="bg-svg" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
              <defs>
@@ -96,7 +95,7 @@
   </div>
 </template>
 
-<script setup name="Index" lang="ts">
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 // 假设已全局注册图标，如未注册请取消下方注释手动引入
 // import { Monitor, Bell } from '@element-plus/icons-vue';

@@ -250,7 +250,7 @@
   </div>
 </template>
 
-<script setup name="User" lang="ts">
+<script setup lang="ts">
 import api from '@/api/system/user';
 import { UserForm, UserQuery, UserVO, UserRoleDTO } from '@/api/system/user/types';
 import { RoleVO } from '@/api/system/role/types';

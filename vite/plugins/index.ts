@@ -5,7 +5,6 @@ import createAutoImport from './auto-import';
 import createComponents from './components';
 import createIcons from './icons';
 import createSvgIconsPlugin from './svg-icon';
-import createSetupExtend from './setup-extend';
 import path from 'path';
 
 export default (viteEnv: any, isBuild = false): [] => {
@@ -16,6 +15,5 @@ export default (viteEnv: any, isBuild = false): [] => {
   vitePlugins.push(createComponents(path));
   vitePlugins.push(createIcons());
   vitePlugins.push(createSvgIconsPlugin(path));
-  vitePlugins.push(createSetupExtend());
   return vitePlugins;
 };

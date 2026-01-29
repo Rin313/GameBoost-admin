@@ -18,7 +18,7 @@
   </div>
 </template>
 
-<script setup name="Online" lang="ts">
+<script setup lang="ts">
 import { delOnline } from '@/api/monitor/online';
 import { HttpStatus } from '@/enums/RespEnum';
 import { propTypes } from '@/utils/propTypes';

@@ -74,20 +74,6 @@ const newNotice = ref(<number>0);
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 const dynamic = ref(false);
-// 搜索菜单
-const searchMenuRef = ref<InstanceType<typeof SearchMenu>>();
-
-const openSearchMenu = () => {
-  searchMenuRef.value?.openSearch();
-};
-
-
-const dynamicClearEvent = async () => {
-  dynamic.value = false;
-  await proxy?.$router.push('/');
-  await proxy?.$tab.closeAllPage();
-  await proxy?.$tab.refreshPage();
-};
 
 const toggleSideBar = () => {
   appStore.toggleSideBar(false);

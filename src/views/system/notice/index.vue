@@ -94,7 +94,7 @@
   </div>
 </template>
 
-<script setup name="Notice" lang="ts">
+<script setup lang="ts">
 import { addNotice, delNotice, listNotice, updateNotice } from '@/api/system/notice';
 import type { NoticeForm, NoticeQuery, NoticeVO } from '@/api/system/notice/types';
 

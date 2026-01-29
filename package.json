@@ -46,7 +46,6 @@
     "unplugin-auto-import": "19.3.0",
     "unplugin-icons": "22.5.0",
     "unplugin-vue-components": "28.8.0",
-    "unplugin-vue-setup-extend-plus": "1.0.1",
     "vite": "6.4.1",
     "vite-plugin-svg-icons-ng": "^1.5.2",
     "vitest": "3.2.4",

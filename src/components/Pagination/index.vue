@@ -14,7 +14,7 @@
   </div>
 </template>
 
-<script setup name="Pagination" lang="ts">
+<script setup lang="ts">
 import { scrollTo } from '@/utils/scroll-to';
 import { propTypes } from '@/utils/propTypes';
 

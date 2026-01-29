@@ -86,7 +86,7 @@
   </div>
 </template>
 
-<script setup name="Logininfor" lang="ts">
+<script setup lang="ts">
 import { list, unlockLoginInfo } from '@/api/monitor/loginInfo';
 import { LoginInfoQuery, LoginInfoVO } from '@/api/monitor/loginInfo/types';
 

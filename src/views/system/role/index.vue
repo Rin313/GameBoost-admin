@@ -137,7 +137,7 @@
   </div>
 </template>
 
-<script setup name="Role" lang="ts">
+<script setup lang="ts">
 import { addRole, delRole, listRole, updateRole} from '@/api/system/role';
 import { roleMenuTreeselect, treeselect as menuTreeselect } from '@/api/system/menu/index';
 import { RoleVO, RoleForm, RoleQuery} from '@/api/system/role/types';

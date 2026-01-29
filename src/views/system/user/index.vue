@@ -206,7 +206,7 @@
   </div>
 </template>
 
-<script setup name="User" lang="ts">
+<script setup lang="ts">
 import { Delete, Plus } from '@element-plus/icons-vue';
 import api from '@/api/system/user';
 import { UserForm, UserQuery, UserVO, UserRoleDTO } from '@/api/system/user/types';
