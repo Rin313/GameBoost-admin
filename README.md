@@ -10,8 +10,6 @@ npm run build:prod
 ```
 
 TODO
-transition.ts
-animate.css
 file-saver
 vue-cropper
 nprogress

@@ -2,7 +2,6 @@ import modal from '@/plugins/modal';
 import tab from '@/plugins/tab';
 import download from '@/plugins/download';
 import auth from '@/plugins/auth';
-import animate from '@/animate';
 import { useDict } from '@/utils/dict';
 import { handleTree, addDateRange, selectDictLabel, selectDictLabels, parseTime } from '@/utils/ruoyi';
 import { getConfigKey } from '@/api/system/config';
@@ -18,7 +17,6 @@ declare module 'vue' {
     $tab: typeof tab;
     $download: typeof download;
     $auth: typeof auth;
-    animate: typeof animate;
     /**
      * i18n $t方法支持ts类型提示
      * @param key i18n key

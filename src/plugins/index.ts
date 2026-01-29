@@ -2,8 +2,6 @@ import modal from './modal';
 import tab from './tab';
 import download from './download';
 import auth from './auth';
-// 预设动画
-import animate from '@/animate';
 
 import { download as dl } from '@/utils/request';
 import { useDict } from '@/utils/dict';
@@ -34,5 +32,4 @@ export default function installPlugin(app: App) {
   app.config.globalProperties.addDateRange = addDateRange;
   app.config.globalProperties.selectDictLabel = selectDictLabel;
   app.config.globalProperties.selectDictLabels = selectDictLabels;
-  app.config.globalProperties.animate = animate;
 }

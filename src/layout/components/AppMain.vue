@@ -10,29 +10,11 @@
 </template>
 
 <script setup lang="ts">
-import { useSettingsStore } from '@/store/modules/settings';
 import { useTagsViewStore } from '@/store/modules/tagsView';
 
 import IframeToggle from './IframeToggle/index.vue';
-const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 const route = useRoute();
 const tagsViewStore = useTagsViewStore();
-
-// 随机动画集合
-const animate = ref<string>('');
-const animationEnable = ref(useSettingsStore().animationEnable);
-watch(
-  () => useSettingsStore().animationEnable,
-  (val: boolean) => {
-    animationEnable.value = val;
-    if (val) {
-      animate.value = proxy?.animate.animateList[Math.round(Math.random() * proxy?.animate.animateList.length)] as string;
-    } else {
-      animate.value = proxy?.animate.defaultAnimate as string;
-    }
-  },
-  { immediate: true }
-);
 
 onMounted(() => {
   addIframe();
