@@ -6,7 +6,7 @@ npm install --registry=https://registry.npmmirror.com
 npm run dev
 
 # 构建生产环境
-npm run build:prod
+npm run build
 ```
 
 TODO

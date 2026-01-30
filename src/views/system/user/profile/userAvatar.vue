@@ -41,12 +41,6 @@
         <el-col :lg="{ span: 1, offset: 1 }" :md="2">
           <el-button icon="Minus" @click="changeScale(-1)"></el-button>
         </el-col>
-        <el-col :lg="{ span: 1, offset: 1 }" :md="2">
-          <el-button icon="RefreshLeft" @click="rotateLeft()"></el-button>
-        </el-col>
-        <el-col :lg="{ span: 1, offset: 1 }" :md="2">
-          <el-button icon="RefreshRight" @click="rotateRight()"></el-button>
-        </el-col>
         <el-col :lg="{ span: 2, offset: 6 }" :md="2">
           <el-button type="primary" @click="uploadImg()">提 交</el-button>
         </el-col>
@@ -105,14 +99,6 @@ const modalOpened = () => {
 };
 /** 覆盖默认上传行为 */
 const requestUpload = (): any => {};
-/** 向左旋转 */
-const rotateLeft = () => {
-  cropper.value.rotateLeft();
-};
-/** 向右旋转 */
-const rotateRight = () => {
-  cropper.value.rotateRight();
-};
 /** 图片缩放 */
 const changeScale = (num: number) => {
   num = num || 1;

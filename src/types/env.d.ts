@@ -11,7 +11,6 @@ interface ImportMetaEnv {
   VITE_APP_BASE_API: string;
   VITE_APP_BASE_URL: string;
   VITE_APP_CONTEXT_PATH: string;
-  VITE_APP_ENV: string;
   VITE_APP_WEBSOCKET: string;
 }
 interface ImportMeta {
