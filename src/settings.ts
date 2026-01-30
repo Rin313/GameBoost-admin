@@ -25,7 +25,7 @@ const setting: DefaultSettings = {
   /**
    * 是否显示 tagsView
    */
-  tagsView: true,
+  tagsView: false,
 
   /**
    * 显示页签图标
@@ -46,11 +46,6 @@ const setting: DefaultSettings = {
    * 是否显示动态标题
    */
   dynamicTitle: false,
-
-  /**
-   * 是否开启动画 开启随机 关闭渐进渐出
-   */
-  animationEnable: false,
 
   /**
    * 是否暗黑模式

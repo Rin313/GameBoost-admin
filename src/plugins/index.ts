@@ -1,6 +1,5 @@
 import modal from './modal';
 import tab from './tab';
-import download from './download';
 import auth from './auth';
 
 import { download as dl } from '@/utils/request';
@@ -16,9 +15,6 @@ export default function installPlugin(app: App) {
 
   // 模态框对象
   app.config.globalProperties.$modal = modal;
-
-  // 下载文件
-  app.config.globalProperties.$download = download;
 
   // 认证对象
   app.config.globalProperties.$auth = auth;

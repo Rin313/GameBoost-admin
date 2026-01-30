@@ -19,7 +19,6 @@
 <el-descriptions-item label="请求参数">
   <template #default>
     <div class="max-h-300px overflow-y-auto">
-      <!-- 替换为 pre 标签 -->
       <pre class="json-display">{{ formatToJsonString(info.operParam) }}</pre>
     </div>
   </template>
@@ -27,7 +26,6 @@
 <el-descriptions-item label="返回参数">
   <template #default>
     <div class="max-h-300px overflow-y-auto">
-      <!-- 替换为 pre 标签 -->
       <pre class="json-display">{{ formatToJsonString(info.jsonResult) }}</pre>
     </div>
   </template>

@@ -133,11 +133,7 @@ declare global {
      * 语言
      */
     language: LanguageEnum;
-
-    /**
-     * 是否启用动画效果
-     */
-    animationEnable: boolean;
+    
     /**
      *  是否启用暗黑模式
      *

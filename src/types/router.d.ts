@@ -5,7 +5,6 @@ declare module 'vue-router' {
     title?: string;
     affix?: boolean;
     noCache?: boolean;
-    //activeMenu?: string;
     icon?: string;
     breadcrumb?: boolean;
   }

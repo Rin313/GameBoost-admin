@@ -25,7 +25,6 @@ export const useSettingsStore = defineStore('setting', () => {
   const fixedHeader = ref<boolean>(storageSetting.value.fixedHeader);
   const sidebarLogo = ref<boolean>(storageSetting.value.sidebarLogo);
   const dynamicTitle = ref<boolean>(storageSetting.value.dynamicTitle);
-  const animationEnable = ref<boolean>(defaultSettings.animationEnable);
   const dark = ref<boolean>(defaultSettings.dark);
 
   const setTitle = (value: string) => {
@@ -43,7 +42,6 @@ export const useSettingsStore = defineStore('setting', () => {
     fixedHeader,
     sidebarLogo,
     dynamicTitle,
-    animationEnable,
     dark,
     setTitle
   };

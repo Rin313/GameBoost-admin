@@ -10,9 +10,7 @@ npm run build:prod
 ```
 
 TODO
-file-saver
 vue-cropper
-nprogress
 
 
 我正在开发一个使用vue3的管理端项目，我需要设计一个页面分配方案：

@@ -28,8 +28,6 @@ import { useSettingsStore } from '@/store/modules/settings';
 import { usePermissionStore } from '@/store/modules/permission';
 import { RouteRecordRaw } from 'vue-router';
 
-const { proxy } = getCurrentInstance() as ComponentInternalInstance;
-
 const route = useRoute();
 const appStore = useAppStore();
 const settingsStore = useSettingsStore();

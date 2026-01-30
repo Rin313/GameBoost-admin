@@ -1,6 +1,4 @@
 import router from './router';
-import NProgress from 'nprogress';
-import 'nprogress/nprogress.css';
 import { getToken } from '@/utils/auth';
 import { isHttp, isPathMatch } from '@/utils/validate';
 import { isRelogin } from '@/utils/request';
@@ -9,7 +7,6 @@ import { useSettingsStore } from '@/store/modules/settings';
 import { usePermissionStore } from '@/store/modules/permission';
 import { ElMessage } from 'element-plus/es';
 
-NProgress.configure({ showSpinner: false });
 const whiteList = ['/login', '/register', '/social-callback', '/register*', '/register/*'];
 
 const isWhiteList = (path: string) => {
@@ -17,13 +14,11 @@ const isWhiteList = (path: string) => {
 };
 
 router.beforeEach(async (to, from, next) => {
-  NProgress.start();
   if (getToken()) {
     to.meta.title && useSettingsStore().setTitle(to.meta.title as string);
     /* has token*/
     if (to.path === '/login') {
       next({ path: '/' });
-      NProgress.done();
     } 
     else if(to.path ==='/'){
         //直接同步了下面的代码块//TODO：增加是否使用首页的选项
@@ -112,11 +107,6 @@ router.beforeEach(async (to, from, next) => {
     } else {
       const redirect = encodeURIComponent(to.fullPath || '/');
       next(`/login?redirect=${redirect}`); // 否则全部重定向到登录页
-      NProgress.done();
     }
   }
-});
-
-router.afterEach(() => {
-  NProgress.done();
 });

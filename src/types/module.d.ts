@@ -1,6 +1,5 @@
 import modal from '@/plugins/modal';
 import tab from '@/plugins/tab';
-import download from '@/plugins/download';
 import auth from '@/plugins/auth';
 import { useDict } from '@/utils/dict';
 import { handleTree, addDateRange, selectDictLabel, selectDictLabels, parseTime } from '@/utils/ruoyi';

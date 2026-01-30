@@ -4,12 +4,9 @@ import { getToken } from '@/utils/auth';
 import { tansParams, blobValidate } from '@/utils/ruoyi';
 import { HttpStatus } from '@/enums/RespEnum';
 import { errorCode } from '@/utils/errorCode';
-import { LoadingInstance } from 'element-plus/es/components/loading/src/loading';
-import FileSaver from 'file-saver';
 import { getLanguage } from '@/lang';
 import router from '@/router';
-
-let downloadLoadingInstance: LoadingInstance;
+import {saveAs} from '@/utils/download'
 // 是否显示重新登录
 export const isRelogin = { show: false };
 export const globalHeaders = () => {
@@ -64,8 +61,6 @@ service.interceptors.request.use(
       };
       
       const interval = 500; // 间隔时间(ms)
-      
-      // 直接对比内存变量
       if (
         requestObj.data === lastRequest.data && 
         requestObj.url === lastRequest.url && 
@@ -147,33 +142,36 @@ service.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-// 通用下载方法
 export function download(url: string, params: any, fileName: string) {
-  downloadLoadingInstance = ElLoading.service({ text: '正在下载数据，请稍候', background: 'rgba(0, 0, 0, 0.7)' });
-  return service.post(url, params, {
-      transformRequest: [
-        (params: any) => {
-          return tansParams(params);
-        }
-      ],
+  const downloadLoadingInstance = ElLoading.service({ 
+    text: '正在下载数据，请稍候', 
+    background: 'rgba(0, 0, 0, 0.7)' 
+  });
+
+  return service
+    .post(url, params, {
+      transformRequest: [(params: any) => tansParams(params)],
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       responseType: 'blob'
-    }).then(async (resp: any) => {
-      const isLogin = blobValidate(resp);
-      if (isLogin) {
+    })
+    .then(async (resp: any) => {
+      const isValid = blobValidate(resp);
+      if (isValid) {
         const blob = new Blob([resp]);
-        FileSaver.saveAs(blob, fileName);
+        saveAs(blob, fileName);
       } else {
-        const blob = new Blob([resp]);
-        const resText = await blob.text();
+        // 处理业务错误（后端返回 JSON 错误信息）
+        const resText = await new Blob([resp]).text();
         const rspObj = JSON.parse(resText);
         const errMsg = errorCode[rspObj.code] || rspObj.msg || errorCode['default'];
         ElMessage.error(errMsg);
       }
-      downloadLoadingInstance.close();
-    }).catch((r: any) => {
-      console.error(r);
-      ElMessage.error('下载文件出现错误，请联系管理员！');
+    })
+    .catch((error: any) => {
+      console.error(error);
+      ElMessage.error('下载文件出现错误！');
+    })
+    .finally(() => {
       downloadLoadingInstance.close();
     });
 }

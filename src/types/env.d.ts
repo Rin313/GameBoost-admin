@@ -12,7 +12,6 @@ interface ImportMetaEnv {
   VITE_APP_BASE_URL: string;
   VITE_APP_CONTEXT_PATH: string;
   VITE_APP_ENV: string;
-  VITE_APP_RSA_PRIVATE_KEY: string;
   VITE_APP_WEBSOCKET: string;
 }
 interface ImportMeta {
