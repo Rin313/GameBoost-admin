@@ -216,7 +216,7 @@ import { useUserStore } from '@/store/modules/user';
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 const { status_enabled, user_sex,status_user } = toRefs<any>(proxy?.useDict('status_enabled', 'user_sex','status_user'));
-const userList = ref<UserVO[]>();
+const userList = ref([]);
 const showSearch = ref(true);
 const ids = ref<Array<number | string>>([]);
 const single = ref(true);

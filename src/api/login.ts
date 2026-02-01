@@ -12,7 +12,6 @@ export function login(data: LoginData): AxiosPromise<LoginResult> {
     url: '/auth/login',
     headers: {
       isToken: false,
-      isEncrypt: true,
       repeatSubmit: false
     },
     method: 'post',
@@ -30,7 +29,6 @@ export function register(data: any) {
     url: '/auth/register',
     headers: {
       isToken: false,
-      isEncrypt: true,
       repeatSubmit: false
     },
     method: 'post',
@@ -46,7 +44,6 @@ export function applicate(data: any) {
     url: '/system/user/applicate',
     headers: {
       isToken: false,
-      isEncrypt: true,
       repeatSubmit: false
     },
     method: 'post',

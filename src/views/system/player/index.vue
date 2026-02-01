@@ -72,6 +72,7 @@
         <el-table-column key="realName" label="姓名" align="center" prop="realName" />
         <el-table-column key="idCard" label="身份证号" align="center" prop="idCard" />
         <el-table-column key="phonenumber" label="手机号码" align="center" prop="phonenumber"/>
+        <el-table-column key="alipayUsername" label="支付宝账号" align="center" prop="meta.alipayUsername"/>
         <el-table-column key="deposit" label="保证金" align="center" prop="assets.deposit">
             <template #default="scope">
                 <span>{{ formatAmount(scope.row.assets?.deposit) }}</span>
@@ -130,7 +131,7 @@
 
     <!-- 添加或修改用户配置对话框 -->
     <el-dialog ref="formDialogRef" v-model="dialog.visible" :title="dialog.title" width="700px" append-to-body @close="closeDialog">
-      <el-form ref="userFormRef" :model="form" :rules="rules" label-width="80px">        
+      <el-form ref="userFormRef" :model="form" :rules="rules" label-width="90px">        
         <el-row>
           <el-col :span="12">
             <el-form-item v-if="form.userId == undefined" label="用户名" prop="userName">
@@ -152,7 +153,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item v-if="form.userId == undefined" label="身份证号" prop="idCard">
+            <el-form-item label="身份证号" prop="idCard">
               <el-input v-model="form.idCard" placeholder="请输入身份证号" maxlength="30" />
             </el-form-item>
           </el-col>
@@ -161,6 +162,13 @@
           <el-col :span="12">
             <el-form-item label="手机号码" prop="phonenumber">
               <el-input v-model="form.phonenumber" placeholder="请输入手机号码" maxlength="11" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="支付宝账号" prop="meta.alipayUsername">
+              <el-input v-model="form.alipayUsername" placeholder="请输入支付宝账号"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -459,7 +467,6 @@ const initData: PageData<UserForm, UserQuery> = {
     idCard: [
         { required: true, trigger: 'blur', message: t('register.rule.idCard.required') },
         { 
-        // 这是一个比较严格的18位身份证校验正则，包含日期有效性校验，最后一位允许X/x
         pattern: /^[1-9]\d{5}(?:18|19|20)\d{2}(?:0[1-9]|10|11|12)(?:0[1-9]|[1-2]\d|30|31)\d{3}[\dXx]$/,
         message: t('register.rule.idCard.pattern'),
         trigger: 'blur' 
@@ -579,7 +586,7 @@ const handleUpdate = async (row?: UserForm) => {
   
   const userData = userRes.data.user;
   Object.assign(form.value, userData);
-
+  form.value.alipayUsername=userData.meta.alipayUsername
   if (userData.roles && userData.roles.length > 0) {
     // 从 user.roles 获取角色信息（包含 expireTime）
     form.value.userRoles = userData.roles.map((role: RoleVO) => ({

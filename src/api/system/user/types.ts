@@ -41,6 +41,7 @@ export interface UserVO extends BaseEntity {
   remark: string;
   roles: RoleVO[];
   assets: JSON;
+  meta: JSON;
 }
 
 /**
@@ -68,6 +69,7 @@ export interface UserForm {
   userRoles: UserRoleDTO[];
 realName?: string;
     idCard?: string;
+    alipayUsername?: string;
 }
 
 export interface UserInfoVO {

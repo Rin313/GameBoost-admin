@@ -44,11 +44,3 @@ export function delConfig(configId: string | number | Array<string | number>) {
     method: 'post'
   });
 }
-
-// 刷新参数缓存
-export function refreshCache() {
-  return request({
-    url: '/system/config/refreshCache',
-    method: 'post'
-  });
-}

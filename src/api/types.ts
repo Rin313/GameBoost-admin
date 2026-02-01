@@ -35,7 +35,7 @@ export interface LoginData {
  * 登录响应
  */
 export interface LoginResult {
-  access_token: string;
+  accessToken: string;
 }
 
 /**

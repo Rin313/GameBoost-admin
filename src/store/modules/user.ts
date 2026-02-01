@@ -18,8 +18,8 @@ export const useUserStore = defineStore('user', () => {
     try {
         const res = await loginApi(userInfo);
         const data = res.data;
-        setToken(data.access_token);
-        token.value = data.access_token;
+        setToken(data.accessToken);
+        token.value = data.accessToken;
         return Promise.resolve();
     } catch (err) {
         return Promise.reject(err);

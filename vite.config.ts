@@ -17,7 +17,6 @@ export default defineConfig(({ mode, command }) => {
     plugins: createPlugins(env, command === 'build'),
     server: {
       host: '0.0.0.0',
-      port: Number(env.VITE_APP_PORT),
       open: true,
       proxy: {
         [env.VITE_APP_BASE_API]: {

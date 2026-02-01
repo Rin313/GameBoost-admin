@@ -366,7 +366,6 @@ const registerRules: ElFormRules = {
     idCard: [
         { required: true, trigger: 'blur', message: t('register.rule.idCard.required') },
         { 
-        // 这是一个比较严格的18位身份证校验正则，包含日期有效性校验，最后一位允许X/x
         pattern: /^[1-9]\d{5}(?:18|19|20)\d{2}(?:0[1-9]|10|11|12)(?:0[1-9]|[1-2]\d|30|31)\d{3}[\dXx]$/,
         message: t('register.rule.idCard.pattern'),
         trigger: 'blur' 
