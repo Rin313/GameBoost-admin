@@ -5,13 +5,9 @@
       <el-card shadow="hover">
         <el-form ref="queryFormRef" :model="queryParams" :inline="true">
           <el-form-item label="业务类型" prop="bizType">
-            <el-input 
-              v-model="queryParams.bizType" 
-              placeholder="请输入业务类型" 
-              clearable 
-              style="width: 200px"
-              @keyup.enter="handleQuery" 
-            />
+            <el-select v-model="queryParams.bizType" placeholder="业务类型" clearable>
+                <el-option v-for="dict in deposit_type" :key="dict" :label="dict" :value="dict" />
+            </el-select>
           </el-form-item>
           <el-form-item label="创建时间">
             <el-date-picker
@@ -95,6 +91,7 @@ import { listDepositSelf } from '@/api/bizLog';
 import { BizLogVO, BizLogQuery } from '@/api/bizLog/types';
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
+const deposit_type = ref([]);
 const { parseTime } = proxy;
 
 // 列表数据
@@ -169,8 +166,12 @@ const resetQuery = () => {
 };
 
 // 页面加载时获取数据
-onMounted(() => {
+onMounted(async () => {
   getList();
+await proxy?.getConfigKey('deposit_type').then((response) => {
+    deposit_type.value = JSON.parse(response?.data || '[]');
+  });
+  deposit_type.value.push("注册激活")
 });
 </script>
 

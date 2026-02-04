@@ -7,14 +7,32 @@
       <el-card shadow="hover">
         <el-form ref="queryFormRef" :model="queryParams" :inline="true">
           <el-form-item label="业务类型" prop="bizType">
-            <el-input 
-              v-model="queryParams.bizType" 
-              placeholder="请输入业务类型" 
-              clearable 
-              style="width: 200px"
-              @keyup.enter="handleQuery" 
-            />
+            <el-select v-model="queryParams.bizType" placeholder="业务类型" clearable>
+                <el-option v-for="dict in deposit_type" :key="dict" :label="dict" :value="dict" />
+            </el-select>
           </el-form-item>
+                  <el-form-item label="用户姓名" prop="realName">
+            <el-input
+                v-model="queryParams.realName"
+                placeholder="请输入用户姓名"
+                clearable
+                style="width: 180px"
+                @keyup.enter="handleQuery"
+            />
+        </el-form-item>
+        <el-form-item label="变化范围">
+      <el-input-number
+        v-model="queryParams.minAmount"
+        placeholder="最小值"
+        :precision="2"
+      />
+      <span style="margin: 0 8px; color: #909399;">至</span>
+      <el-input-number
+        v-model="queryParams.maxAmount"
+        placeholder="最大值"
+        :precision="2"
+      />
+    </el-form-item>
           <el-form-item label="创建时间">
             <el-date-picker
               v-model="dateRange"
@@ -98,10 +116,11 @@
 <script setup lang="ts">
 import { listDeposit } from '@/api/bizLog';
 import { listPlayers } from '@/api/system/user';
-import { BizLogVO, BizLogQuery } from '@/api/bizLog/types';
+import { BizLogVO } from '@/api/bizLog/types';
 import { UserVO } from '@/api/system/user/types';
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
+const deposit_type = ref([]);
 const { parseTime } = proxy;
 
 // 列表数据
@@ -116,12 +135,15 @@ const dateRange = ref<[string, string] | null>(null);
 const queryFormRef = ref<ElFormInstance>();
 
 // 查询参数
-const queryParams = ref<BizLogQuery>({
+const queryParams = ref({
   pageNum: 1,
   pageSize: 10,
   bizType: undefined,
   beginTime: undefined,
-  endTime: undefined
+  endTime: undefined,
+  realName:undefined,
+  minAmount:undefined,
+  maxAmount:undefined
 });
 
 /**
@@ -175,7 +197,7 @@ const fetchUserInfo = async () => {
     
     // 构建用户ID到用户信息的映射
     const userList = userRes.data.records || [];
-    const userMap = new Map<number, UserVO>();
+    const userMap = new Map<any, any>();
     userList.forEach((user: UserVO) => {
       if (user.userId) {
         userMap.set(user.userId, user);
@@ -215,14 +237,21 @@ const resetQuery = () => {
     pageSize: 10,
     bizType: undefined,
     beginTime: undefined,
-    endTime: undefined
+    endTime: undefined,
+    realName:undefined,
+    minAmount:undefined,
+    maxAmount:undefined
   };
   handleQuery();
 };
 
 // 页面加载时获取数据
-onMounted(() => {
+onMounted(async () => {
   getList();
+  await proxy?.getConfigKey('deposit_type').then((response) => {
+    deposit_type.value = JSON.parse(response?.data || '[]');
+  });
+  deposit_type.value.push("注册激活")
 });
 </script>
 

@@ -282,7 +282,7 @@ const single = ref(true);
 const multiple = ref(true);
 const selected=ref([]);
 const total = ref(0);
-const dateRange = ref<[DateModelType, DateModelType]>(['', '']);
+const dateRange = ref(['', '']);
 const initPassword = ref<string>('');
 
 const queryFormRef = ref<ElFormInstance>();

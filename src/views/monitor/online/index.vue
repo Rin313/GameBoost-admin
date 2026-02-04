@@ -51,17 +51,16 @@
 
 <script setup lang="ts">
 import { forceLogout, list} from '@/api/monitor/online';
-import { OnlineQuery, OnlineVO } from '@/api/monitor/online/types';
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 
-const onlineList = ref<OnlineVO[]>([]);
+const onlineList = ref([]);
 const total = ref(0);
 const showSearch=ref(true)
 
 const queryFormRef = ref<ElFormInstance>();
 
-const queryParams = ref<OnlineQuery>({
+const queryParams = ref({
   pageNum: 1,
   pageSize: 10,
   ipaddr: '',
@@ -81,7 +80,7 @@ const resetQuery = () => {
   queryFormRef.value?.resetFields();
   handleQuery();
 };
-const handleForceLogout = async (row: OnlineVO) => {
+const handleForceLogout = async (row) => {
     try{
         await proxy?.$modal.confirm('是否确认强退名称为"' + row.userName + '"的用户?');
         await forceLogout(row.tokenId);

@@ -5,13 +5,9 @@
       <el-card shadow="hover">
         <el-form ref="queryFormRef" :model="queryParams" :inline="true">
           <el-form-item label="业务类型" prop="bizType">
-            <el-input 
-              v-model="queryParams.bizType" 
-              placeholder="请输入业务类型" 
-              clearable 
-              style="width: 200px"
-              @keyup.enter="handleQuery" 
-            />
+            <el-select v-model="queryParams.bizType" placeholder="业务类型" clearable>
+                <el-option v-for="dict in credit_type" :key="dict.label" :label="dict.label" :value="dict.label" />
+            </el-select>
           </el-form-item>
           <el-form-item label="创建时间">
             <el-date-picker
@@ -95,6 +91,7 @@ import { listCreditSelf } from '@/api/bizLog';
 import { BizLogVO, BizLogQuery } from '@/api/bizLog/types';
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
+const { credit_type } = toRefs<any>(proxy?.useDict('credit_type'));
 const { parseTime } = proxy;
 
 // 列表数据
@@ -169,8 +166,9 @@ const resetQuery = () => {
 };
 
 // 页面加载时获取数据
-onMounted(() => {
-  getList();
+onMounted(async () => {
+  await getList();
+    credit_type.value.push({"label":"注册激活","value":12})
 });
 </script>
 

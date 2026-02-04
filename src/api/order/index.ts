@@ -36,11 +36,10 @@ export function updateOrder(data: OrderUpdateForm) {
 
 
 
-import {TaskQuery } from './types';
 /**
  * 获取任务列表
  */
-export function listTasks(query: TaskQuery) {
+export function listTasks(query) {
   return request({
     url: '/order/listTasks',
     method: 'get',
@@ -48,7 +47,7 @@ export function listTasks(query: TaskQuery) {
   });
 }
 
-export function listTasksSelf(query: TaskQuery) {
+export function listTasksSelf(query) {
   return request({
     url: '/order/listTasksSelf',
     method: 'get',
@@ -92,4 +91,56 @@ export function submit(data){
         'Content-Type': 'multipart/form-data'
         }
   });
+}
+export function withdrawal(data){
+    return request({
+        url: '/order/withdrawal',
+        method: 'post',
+        data: data
+  });
+}
+
+// 获取数据分析总览
+export function getAnalysisOverview(params) {
+  return request({
+    url: '/order/analysis/overview',
+    method: 'get',
+    params
+  })
+}
+
+// 获取时间趋势数据
+export function getTimeTrend(params) {
+  return request({
+    url: '/order/analysis/trend',
+    method: 'get',
+    params
+  })
+}
+
+// 按业务类型统计
+export function getByOrderType(params) {
+  return request({
+    url: '/order/analysis/by-order-type',
+    method: 'get',
+    params
+  })
+}
+
+// 按代练统计
+export function getByUser(params) {
+  return request({
+    url: '/order/analysis/by-user',
+    method: 'get',
+    params
+  })
+}
+
+// 获取特定代练详细统计
+export function getUserDetail(userId, params) {
+  return request({
+    url: `/order/analysis/user/${userId}`,
+    method: 'get',
+    params
+  })
 }

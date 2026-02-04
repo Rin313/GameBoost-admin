@@ -32,28 +32,21 @@
     </el-dialog>
   </el-row>
 </template>
+
 <script setup lang="ts">
 import { listPlayers } from '@/api/system/user';
-import { insertTask, transfer } from '@/api/order'
 import { UserVO } from '@/api/system/user/types';
-import { UserQuery } from '@/api/system/user/types';
 
-const props = defineProps({
-  orderId: {
-    type: [Number, String],
-    required: true
-  }
-});
-
-const { proxy } = getCurrentInstance();
+// 移除了 orderId prop，因为不再需要调用 insertTask
+const { proxy } = getCurrentInstance() as any;
 const userList = ref<UserVO[]>([]);
 const visible = ref(false);
 const total = ref(0);
-const userId=ref(undefined);
-const taskId=ref(undefined)
-const userIds = ref<Array<string | number>>([]);
 
-const queryParams = reactive<UserQuery>({
+// 改为直接存储 selection
+const selection = ref<UserVO[]>([]);
+
+const queryParams = reactive({
   pageNum: 1,
   pageSize: 10,
   phonenumber: '',
@@ -64,34 +57,25 @@ const queryParams = reactive<UserQuery>({
 const tableRef = ref<ElTableInstance>();
 const queryFormRef = ref<ElFormInstance>();
 
-const show = () => {
-  getList();
+const show = (excluded) => {
+  getList(excluded);
   visible.value = true;
 };
-const transferShow = (ttaskId,tuserId) => {
-    taskId.value=ttaskId;
-    userId.value=tuserId;
-    getList();
-    visible.value = true;
-};
-const clickRow = (row: any) => {
-  tableRef.value?.toggleRowSelection(row, false);
+
+const clickRow = (row: UserVO) => {
+  tableRef.value?.toggleRowSelection(row, undefined);
 };
 
-const handleSelectionChange = (selection: UserVO[]) => {
-  userIds.value = selection.map((item: UserVO) => item.userId);
+// 直接存储 selection 而不是计算 userIds
+const handleSelectionChange = (selected: UserVO[]) => {
+  selection.value = selected;
 };
 
-const getList = async () => {
-  const res = await listPlayers(queryParams);
+const getList = async (excluded?) => {
+  const res = await listPlayers({...queryParams,excluded});
   let list = res.data.records;
-  if (userId.value) {
-    list = list.filter((item: UserVO) => 
-      String(item.userId) !== String(userId.value)
-    );
-  }
   userList.value = list;
-  total.value = userId.value ? list.length : res.data.total;
+  total.value = res.data.total;
 };
 
 const handleQuery = () => {
@@ -104,33 +88,28 @@ const resetQuery = () => {
   getList();
 };
 
-const emit = defineEmits(['ok']);
+// 修改 emit 类型，传递 selection
+const emit = defineEmits<{
+  (e: 'ok', selection: UserVO[]): void;
+}>();
 
-const handleSelectUser = async () => {
-  if (userIds.value.length <= 0) return;
-  if (taskId.value) {
-    await transfer({
-      taskId: taskId.value,
-      userIds: userIds.value
-    });
-    proxy?.$modal.msgSuccess('转单成功');
-  } else {
-    await insertTask({
-      orderId: props.orderId,
-      userIds: userIds.value
-    });
-    proxy?.$modal.msgSuccess('分配成功');
+// 不再调用 insertTask，直接将 selection 传递给外部组件
+const handleSelectUser = () => {
+  if (selection.value.length <= 0) {
+    proxy?.$modal.msgWarning('请至少选择一个用户');
+    return;
   }
-  emit('ok');
+  emit('ok', selection.value);
   clean();
 };
-const clean=()=>{
-    queryParams.pageNum=1;
-    userId.value=undefined;
-    taskId.value=undefined;
-    visible.value = false;
-}
+
+const clean = () => {
+  queryParams.pageNum = 1;
+  selection.value = []; // 清空选中状态
+  visible.value = false;
+};
+
 defineExpose({
-  show,transferShow
+  show
 });
 </script>

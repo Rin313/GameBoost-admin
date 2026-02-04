@@ -92,7 +92,6 @@ import { LoginInfoQuery, LoginInfoVO } from '@/api/monitor/loginInfo/types';
 
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 const { status_oper } = toRefs<any>(proxy?.useDict('status_oper'));
-
 const loginInfoList = ref<LoginInfoVO[]>([]);
 const showSearch = ref(true);
 const ids = ref<Array<number | string>>([]);

@@ -6,10 +6,16 @@
           <el-col :span="1.5">
             <el-button type="primary" icon="Plus" @click="handleSubmit">提交</el-button>
           </el-col>
+          <el-col :span="1.5">
+            <el-button type="warning" plain :disabled="canWithdrawal" @click="handleWithdrawal()">
+              申请打款
+            </el-button>
+          </el-col>
           <right-toolbar @query-table="getList"></right-toolbar>
         </el-row>
       </template>
-      <el-table border :data="taskList">
+      <el-table border :data="taskList" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="50" align="center" />
         <el-table-column label="派单编号" align="center" prop="id" />
         <el-table-column label="订单编号" align="center" prop="orderNo" />
         <el-table-column label="创建时间" align="center" prop="createTime" />
@@ -36,8 +42,6 @@
         @pagination="getList"
       />
     </el-card>
-
-    <!-- 详情对话框 -->
     <el-dialog v-model="detailVisible" title="任务详情" width="900px" destroy-on-close>
       <el-descriptions :column="1" border>
         <el-descriptions-item label="派单编号">{{ currentTask?.id }}</el-descriptions-item>
@@ -71,14 +75,30 @@
         </el-col>
       </el-row>
     </el-dialog>
-
-    <!-- 提交表单对话框 -->
     <el-dialog v-model="submitDialogVisible" title="提交任务" width="700px" destroy-on-close>
       <el-form ref="submitFormRef" :model="submitForm" :rules="submitRules" label-width="120px">
         <el-form-item label="订单编号" prop="orderNo">
           <el-input v-model="submitForm.orderNo" placeholder="请输入订单编号" clearable />
         </el-form-item>
-
+        <el-form-item label="接单日期" prop="orderDate">
+        <el-date-picker
+          v-model="submitForm.orderDate"
+          type="datetime"
+          placeholder="请选择日期"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          style="width: 100%"
+        />
+      </el-form-item>
+        <el-form-item label="到手金额" prop="orderAmount">
+            <el-input-number 
+            v-model="submitForm.orderAmount" 
+            :min="0"
+            :precision="2"
+            :step="1.00"
+            placeholder="请输入到手金额" 
+            style="width: 100%"
+            />
+        </el-form-item>
         <el-divider content-position="center">上传截图</el-divider>
 
         <el-row :gutter="16">
@@ -121,7 +141,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { listTasksSelf, submit } from '@/api/order';
+import { listTasksSelf, submit,withdrawal } from '@/api/order';
 import { ElMessage } from 'element-plus';
 import { Plus, Delete } from '@element-plus/icons-vue';
 import type { FormInstance, FormRules } from 'element-plus';
@@ -129,7 +149,10 @@ import { getImageUrl } from '@/utils/img';
 
 const { proxy } = getCurrentInstance() as any;
 const { task_type } = toRefs<any>(proxy?.useDict('task_type'));
-
+const ids = ref<Array<number | string>>([]);
+const selected =ref([]);
+const single = ref(true);
+const multiple = ref(true);
 const taskList = ref<any[]>([]);
 const total = ref(0);
 
@@ -137,7 +160,9 @@ const queryParams = ref({
   pageNum: 1,
   pageSize: 10
 });
-
+const canWithdrawal=computed(()=>{
+    return selected.value.length===0 || selected.value.some(item=>item.status!=='3');
+})
 const detailVisible = ref(false);
 const currentTask = ref<any>(null);
 const screenshotLabels = ['账号资产-前', '账号资产-后', '仓库对比-前', '仓库对比-后', '老板结单图'] as const;
@@ -146,14 +171,10 @@ const screenshotLabels = ['账号资产-前', '账号资产-后', '仓库对比-
 const submitDialogVisible = ref(false);
 const submitLoading = ref(false);
 const submitFormRef = ref<FormInstance>();
-
-interface SubmitFormType {
-  orderNo: string;
-  screenshots: (File | null)[];
-}
-
-const submitForm = ref<SubmitFormType>({
+const submitForm = ref({
   orderNo: '',
+  orderAmount: undefined,
+  orderDate: undefined,
   screenshots: Array(screenshotLabels.length).fill(null)
 });
 
@@ -162,7 +183,15 @@ const previewUrls = ref<string[]>([]);
 const submitRules: FormRules = {
   orderNo: [
     { required: true, message: '请输入订单编号', trigger: 'blur' }
-  ]
+  ],
+  orderDate: [{ required: true, message: '接单日期不能为空', trigger: 'change' }],
+  orderAmount: [
+        { 
+            required: true, 
+            message: '到手金额不能为空', 
+            trigger: 'blur' 
+        },
+    ],
 };
 
 // ========== 状态处理 ==========
@@ -176,7 +205,12 @@ const statusMap = computed(() => {
   });
   return map;
 });
-
+const handleSelectionChange = (selection) => {
+    selected.value=selection;
+  ids.value = selection.map((item) => item.id);
+  single.value = selection.length != 1;
+  multiple.value = !selection.length;
+};
 const getStatusLabel = (status?: string): string => {
   if (status === undefined || status === null) return '';
   return statusMap.value[status]?.label || status;
@@ -217,6 +251,8 @@ const handleSubmit = () => {
   // 重置表单
   submitForm.value = {
     orderNo: '',
+    orderAmount: undefined,
+    orderDate: undefined,
     screenshots: Array(screenshotLabels.length).fill(null)
   };
   // 清理之前的预览URL
@@ -275,6 +311,8 @@ const confirmSubmit = async () => {
   // 构建 FormData
   const formData = new FormData();
   formData.append('orderNo', submitForm.value.orderNo);
+  formData.append('orderAmount', submitForm.value.orderAmount);
+  formData.append('orderDate', submitForm.value.orderDate);
   
   // 添加所有截图文件
   submitForm.value.screenshots.forEach((file) => {
@@ -295,7 +333,16 @@ const confirmSubmit = async () => {
     submitLoading.value = false;
   }
 };
-
+const handleWithdrawal = async (row?) => {
+  const taskIds = row?.userId || ids.value;
+  try{
+    await proxy?.$modal.confirm('是否确认申请打款？');
+    await withdrawal(taskIds);
+    await getList();
+    proxy?.$modal.msgSuccess('申请成功');
+  }
+  catch(err){}
+};
 onMounted(() => {
   getList();
 });

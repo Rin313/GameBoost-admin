@@ -7,14 +7,14 @@ import { parseStrEmpty } from '@/utils/ruoyi';
  * 查询用户列表
  * @param query
  */
-export const listUser = (query: UserQuery): AxiosPromise<UserVO[]> => {
+export const listUser = (query?): AxiosPromise<UserVO[]> => {
   return request({
     url: '/system/user/list',
     method: 'get',
     params: query
   });
 };
-export const listPlayers = (query: UserQuery): AxiosPromise<UserVO[]> => {
+export const listPlayers = (query?): AxiosPromise<UserVO[]> => {
   return request({
     url: '/system/user/listPlayers',
     method: 'get',

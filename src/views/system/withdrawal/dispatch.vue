@@ -1,4 +1,3 @@
-<!-- src/views/order/tasks/index.vue -->
 <template>
   <div class="p-2">
     <el-card shadow="hover">
@@ -40,8 +39,6 @@
         @pagination="getList"
       />
     </el-card>
-
-    <!-- 详细信息弹窗 -->
     <el-dialog v-model="detailVisible" title="任务详情" width="900px" destroy-on-close>
       <el-descriptions :column="1" border>
         <el-descriptions-item label="派单编号">{{ currentTask?.id }}</el-descriptions-item>
@@ -101,7 +98,7 @@ const route = useRoute();
 
 const { task_type } = toRefs<any>(proxy?.useDict('task_type'));
 
-const orderId = computed(() => String(route.params.orderId));
+const ids = computed(() => String(route.params.ids));
 const taskList = ref<TaskWithUser[]>([]);
 const total = ref(0);
 
@@ -136,7 +133,7 @@ const getStatusLabel = (status?: string | number): string => {
   return statusMap.value[statusStr]?.label || statusStr;
 };
 
-// 获取状态标签类型（Element Plus 的 tag type）
+// 获取状态标签类型
 const getStatusType = (status?: string | number): string => {
   if (status === undefined || status === null) return 'info';
   const statusStr = String(status);
@@ -160,7 +157,7 @@ const getList = async () => {
   try {
     const res = await listTasks({
       ...queryParams.value,
-      orderId: orderId.value
+      ids: ids.value
     });
     
     const tasks = res.data.records;
@@ -197,14 +194,6 @@ const getList = async () => {
 };
 
 /**
- * 搜索
- */
-const handleQuery = () => {
-  queryParams.value.pageNum = 1;
-  getList();
-};
-
-/**
  * 显示详情
  */
 const handleDetail = (row: TaskWithUser) => {
@@ -213,7 +202,7 @@ const handleDetail = (row: TaskWithUser) => {
 };
 const handleClose = () => {
   const obj: RouteLocationNormalized = {
-    path: '/order',
+    path: '/withdrawal',
     fullPath: '',
     hash: '',
     matched: [],

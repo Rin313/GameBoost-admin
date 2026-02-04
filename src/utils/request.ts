@@ -151,7 +151,7 @@ export function download(url: string, params: any, fileName: string) {
   return service
     .post(url, params, {
       transformRequest: [(params: any) => tansParams(params)],
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      //headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       responseType: 'blob'
     })
     .then(async (resp: any) => {
